@@ -47,7 +47,6 @@ app.post('/contact', (req, res) => {
     console.log()
 })
 
-console.log('server on port', 3000);
 
 const db = new sqlite3.Database('./db/form.db', sqlite3.OPEN_READWRITE, (err) => {
     if (err) return console.error(err.message)
@@ -58,4 +57,9 @@ db.run(sql);
  */
 app.use(express.static(join(__dirname, 'public')))
 
-app.listen(3000)
+const PORT = process.env.PORT || 3000
+console.log('server on port', 3000);
+
+app.listen(PORT, ()=>{
+    console.log('server in port:', PORT);
+})

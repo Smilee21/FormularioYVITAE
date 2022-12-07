@@ -11,7 +11,7 @@ elementosForm.addEventListener("submit", (event) => {
     
     console.log(elementosFormJSON);
     //Guardar en el servidor
-    fetch('http://localhost:3000/contact', {
+    fetch(`http://localhost:`, PORT `/contact`, {
         method: 'POST',
         headers: {
             "Content-Type": "application/json",
