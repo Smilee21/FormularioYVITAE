@@ -1,8 +1,11 @@
 import express from 'express';
-import {dirname, join} from 'path';
+import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
-
 import indexRoutes from './routes/index.js'
+import sqlite3 from 'sqlite3';
+
+let sql;
+
 
 const app = express();
 
@@ -10,21 +13,49 @@ let array = []
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
-
 //configuraciones
 app.set('views', join(__dirname, 'views'))
 app.set('view engine', 'ejs')
-
+app.use(express.json());
 app.use(indexRoutes)
 
-app.post('/contact', (req, res) =>  {
-    let elementosForm = req.body
-    array.push(elementosForm);
-    res.send(JSON.stringify('guardada bb'))
-    console.log(array)
+//Cuando se realiza el post  mediante el fech 
+//este a su vez hace la accion de llevar esos datos a la base de datos de SQLite3
+app.post('/contact', (req, res) => {
+    console.log(req.body);
+    let elementosForm = req.body;
+    let fecha = (JSON.stringify(elementosForm.fecha))
+    let nombre = (JSON.stringify(elementosForm.nombre))
+    let email = (JSON.stringify(elementosForm.email))
+    let mensaje = (JSON.stringify(elementosForm.mensaje))
+    //aqui se insertan los datos en la tabla
+    sql = ('INSERT INTO users (fecha,nombre,email,mensaje)VALUES (?,?,?,?)');
+    db.run(sql, [fecha, nombre, email, mensaje], (err) => {
+        if (err) return console.error(err.message);
+    });
+    //este comando es para conssultar la tabla y mostrarla en la consola
+    // en total hay 7 usuarios de prueba puede que halla mas.
+    //se le pusieron nombres aleatorios
+    sql = 'SELECT * FROM users';
+    db.all(sql, [], (err, rows) => {
+        if (err) return console.error(err.message);
+        rows.forEach(row => {
+            console.log(row)
+        })
+    })
+    res.send(req.body)
+    console.log()
 })
 
+console.log('server on port', 3000);
+
+const db = new sqlite3.Database('./db/form.db', sqlite3.OPEN_READWRITE, (err) => {
+    if (err) return console.error(err.message)
+});
+//se crea la tabla//
+/* sql = 'CREAte TABLE users(id INTEGER PRIMARY KEY, fecha,nombre,email,mensaje)';
+db.run(sql);
+ */
 app.use(express.static(join(__dirname, 'public')))
 
 app.listen(3000)
-console.log('server on port', 3000);
