@@ -23,15 +23,19 @@ app.use(indexRoutes)
 //este a su vez hace la accion de llevar esos datos a la base de datos de SQLite3
 app.post('/contact', (req, res) => {
     console.log(req.body);
+
     let elementosForm = req.body;
-    let fecha = (JSON.stringify(elementosForm.fecha))
-    let nombre = (JSON.stringify(elementosForm.nombre))
-    let email = (JSON.stringify(elementosForm.email))
-    let mensaje = (JSON.stringify(elementosForm.mensaje))
+    let ip = req.ip;
+    let ipjson = ip
+    let fecha = elementosForm.fecha
+    let nombre = elementosForm.nombre
+    let email = elementosForm.email
+    let mensaje = elementosForm.mensaje
     //aqui se insertan los datos en la tabla
-    sql = ('INSERT INTO users (fecha,nombre,email,mensaje)VALUES (?,?,?,?)');
-    db.run(sql, [fecha, nombre, email, mensaje], (err) => {
+    sql = ('INSERT INTO users (fecha,nombre,email,mensaje,ipjson)VALUES (?,?,?,?,?)');
+    db.run(sql, [fecha, nombre, email, mensaje,ipjson], (err) => {
         if (err) return console.error(err.message);
+        
     });
     //este comando es para conssultar la tabla y mostrarla en la consola
     // en total hay 7 usuarios de prueba puede que halla mas.
@@ -52,14 +56,17 @@ const db = new sqlite3.Database('./db/form.db', sqlite3.OPEN_READWRITE, (err) =>
     if (err) return console.error(err.message)
 });
 //se crea la tabla//
-/* sql = 'CREAte TABLE users(id INTEGER PRIMARY KEY, fecha,nombre,email,mensaje)';
+/* sql = 'CREAte TABLE users(id INTEGER PRIMARY KEY, fecha,nombre,email,mensaje,ipjson)';
 db.run(sql);
  */
+
+
+
 app.use(express.static(join(__dirname, 'public')))
 
 const PORT = process.env.PORT || 3000
 console.log('server on port', PORT);
 
-app.listen(PORT, ()=>{
+app.listen(PORT, () => {
     console.log('server in port:', PORT);
 })
