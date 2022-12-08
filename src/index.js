@@ -58,7 +58,7 @@ db.run(sql);
 app.use(express.static(join(__dirname, 'public')))
 
 const PORT = process.env.PORT || 3000
-console.log('server on port', 3000);
+console.log('server on port', PORT);
 
 app.listen(PORT, ()=>{
     console.log('server in port:', PORT);

@@ -10,8 +10,9 @@ elementosForm.addEventListener("submit", (event) => {
     let elementosFormJSON = JSON.stringify(elementosForm);
     
     console.log(elementosFormJSON);
+
     //Guardar en el servidor
-    fetch(`http://localhost:`, PORT `/contact`, {
+    fetch(`/contact`, {
         method: 'POST',
         headers: {
             "Content-Type": "application/json",
@@ -19,5 +20,6 @@ elementosForm.addEventListener("submit", (event) => {
         body: elementosFormJSON,
         
     });
+
 
 })
