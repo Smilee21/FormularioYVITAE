@@ -10,6 +10,7 @@ elementosForm.addEventListener("submit", (event) => {
     let elementosFormJSON = JSON.stringify(elementosForm);
     
     console.log(elementosFormJSON);
+    alert("sus datos se han enviado")
 
     //Guardar en el servidor
     fetch(`/contact`, {
